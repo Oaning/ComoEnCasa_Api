@@ -54,6 +54,24 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
+    public UserDTO login(String email, String password){
+        UserDTO userDto = null;
+
+        try{
+            User userEntity = userRepo.findByEmail(email);
+            if(userEntity != null && userEntity.getPassword().equals(password)){
+                userDto = modelMapper.map(userEntity, UserDTO.class);
+            }
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException("User with email " + email + " not found");
+        } catch (Exception e){
+            throw new RuntimeException();
+        }
+
+        return userDto;
+    }
+
+    @Transactional
     public UserDTO getUser(Long id) {
         UserDTO userDto = null;
 

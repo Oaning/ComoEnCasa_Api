@@ -33,6 +33,9 @@ public class Recipe {
 
     @Column(length = 40, nullable = false)
     private String name;
+    
+    @Column(length = 100, nullable = true)
+    private String photo;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "recipe_ingredient", joinColumns = {@JoinColumn(name = "recipe_id")}, inverseJoinColumns = {@JoinColumn(name = "ingredient_id")})

@@ -10,6 +10,8 @@ import jeroana.comoencasa.dto.UserDTO;
 public interface UserService {
     public UserDTO saveUser(@Valid UserDTO user);
 
+    public UserDTO login(String email, String password);
+
     public UserDTO getUser(Long id);
 
     public List<UserDTO> getAll();

@@ -27,6 +27,8 @@ public class RecipeDTO {
     @Size(min = 3, max = 40)
     private String name;
 
+    private String photo;
+
     @Size(min = 1)
     @NotNull
     private List<IngredientDTO> ingredientsList = new ArrayList<IngredientDTO>();
