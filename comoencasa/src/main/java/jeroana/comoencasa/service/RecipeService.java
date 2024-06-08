@@ -14,5 +14,9 @@ public interface RecipeService {
 
     public List<RecipeDTO> getAll();
 
+    public List<RecipeDTO> getRecipesByIngredients(List<String> ingredients);
+
+    public RecipeDTO getRandomRecipe();
+    
     public void deleteRecipe(Long id);
 }

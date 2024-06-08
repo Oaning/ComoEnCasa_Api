@@ -2,6 +2,7 @@ package jeroana.comoencasa.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -71,8 +72,27 @@ public class RecipeServiceImpl implements RecipeService{
     @Transactional
     public List<RecipeDTO> getAll() {
         List<Recipe> listRecipeEntity = recipeRepo.findAll();
-        List<RecipeDTO> listRecipeDto = listRecipeEntity.stream().map(recipe -> modelMapper.map(recipe, RecipeDTO.class)).collect(Collectors.toList());
-        return listRecipeDto;
+        return listRecipeEntity
+            .stream()
+            .map(recipe -> modelMapper.map(recipe, RecipeDTO.class))
+            .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<RecipeDTO> getRecipesByIngredients(List<String> ingredients){
+        List<Recipe> recipes = recipeRepo.findByIngredients(ingredients);
+        return recipes
+            .stream()
+            .map(recipe -> modelMapper.map(recipe, RecipeDTO.class))
+            .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public RecipeDTO getRandomRecipe(){
+        List<Recipe> recipes = recipeRepo.findAll();
+        Random random = new Random();
+        Recipe randomRecipe = recipes.get(random.nextInt(recipes.size()));
+        return modelMapper.map(randomRecipe, RecipeDTO.class);
     }
 
     @Transactional
