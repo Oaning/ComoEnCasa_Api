@@ -34,7 +34,7 @@ public class Recipe {
     @Column(length = 40, nullable = false)
     private String name;
     
-    @Column(length = 100, nullable = true)
+    @Column(length = 500, nullable = true)
     private String photo;
 
     @ManyToMany(cascade = CascadeType.ALL)

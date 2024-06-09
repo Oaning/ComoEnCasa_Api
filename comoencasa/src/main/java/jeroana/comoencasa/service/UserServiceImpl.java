@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
     public UserDTO saveUser(UserDTO user) {
         User userEntity = modelMapper.map(user, User.class);
 
-        if(user.getId() == null){
+        if(user.getId() == null && userRepo.findByEmail(user.getEmail()) == null){
             List<Long> ids = new ArrayList<Long>();
             if(!user.getRecipesList().isEmpty()){
                 for(RecipeDTO recipes: user.getRecipesList()){
