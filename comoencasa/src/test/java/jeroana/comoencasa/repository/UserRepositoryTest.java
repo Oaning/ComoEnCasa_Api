@@ -35,7 +35,7 @@ public class UserRepositoryTest {
         paco.setPassword(pass);
         paco.setName(name);
 
-        paco.getRecipesList().add(tartaQueso);
+        //paco.getRecipesList().add(tartaQueso);
 
         userRepository.save(paco);
 

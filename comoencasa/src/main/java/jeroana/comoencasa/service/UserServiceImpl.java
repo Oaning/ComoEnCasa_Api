@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
                 for(RecipeDTO recipes: user.getRecipesList()){
                     ids.add(recipes.getId());
                 }
-                userEntity.setRecipesList(recipeRepo.findByRecipes(ids));
+                //userEntity.setRecipesList(recipeRepo.findByRecipes(ids));
             }
         }
         else{

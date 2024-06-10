@@ -41,7 +41,7 @@ public class RecipeServiceImpl implements RecipeService{
             for(IngredientDTO ingredients: recipe.getIngredientsList()){
                 ids.add(ingredients.getId());
             }
-            recipeEntity.setIngredientsList(ingredientRepo.findByIngredients(ids));
+            //recipeEntity.setIngredientsList(ingredientRepo.findByIngredients(ids));
         }
         else {
             recipeEntity = recipeRepo.getReferenceById(recipe.getId());
