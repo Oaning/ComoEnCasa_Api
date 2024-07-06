@@ -20,24 +20,24 @@ public class UserConstraintsValidationExceptionTest {
     public void constraintsValidationExceptionTest(){
 
         //prueba nombre nulo
-        assertThrows(ConstraintViolationException.class, () -> {userService.saveUser(new UserDTO("prueba@mail.com", "12345", null));});
+        assertThrows(ConstraintViolationException.class, () -> {userService.newUser(new UserDTO("prueba@mail.com", "12345", null));});
 
         //prueba nombre demasiado largo
-        assertThrows(ConstraintViolationException.class, () -> {userService.saveUser(new UserDTO("prueba@mail.com", "12345", "prueba1prueba2prueba3prueba4"));});
+        assertThrows(ConstraintViolationException.class, () -> {userService.newUser(new UserDTO("prueba@mail.com", "12345", "prueba1prueba2prueba3prueba4"));});
 
         //prueba email formato incorrecto
-        assertThrows(ConstraintViolationException.class, () -> {userService.saveUser(new UserDTO("prueba.mail.com", "12345", "prueba"));});
+        assertThrows(ConstraintViolationException.class, () -> {userService.newUser(new UserDTO("prueba.mail.com", "12345", "prueba"));});
 
         //prueba contraseña corta
-        assertThrows(ConstraintViolationException.class, () -> {userService.saveUser(new UserDTO("prueba@mail.com", "1234","prueba"));});
+        assertThrows(ConstraintViolationException.class, () -> {userService.newUser(new UserDTO("prueba@mail.com", "1234","prueba"));});
         
         //prueba todo nulo
-        assertThrows(ConstraintViolationException.class, () -> {userService.saveUser(new UserDTO(null, null, null));});
+        assertThrows(ConstraintViolationException.class, () -> {userService.newUser(new UserDTO(null, null, null));});
     }
 
     @Test
     public void createUserOk(){
-        UserDTO userDto = userService.saveUser(new UserDTO("paco@mail.com", "12345", "paco"));
+        UserDTO userDto = userService.newUser(new UserDTO("paco@mail.com", "12345", "paco"));
         
         assertNotNull(userDto);
 

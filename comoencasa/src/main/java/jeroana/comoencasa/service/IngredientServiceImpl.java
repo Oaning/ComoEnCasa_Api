@@ -9,7 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jeroana.comoencasa.dto.IngredientDTO;
@@ -27,34 +26,40 @@ public class IngredientServiceImpl implements IngredientService{
     private ModelMapper modelMapper;
     
     @Transactional
-    public IngredientDTO saveIngredient(@Valid IngredientDTO ingredient) {
-        Ingredient ingredientEntity = modelMapper.map(ingredient, Ingredient.class);
-        ingredientEntity = ingredientRepo.save(ingredientEntity);
-        return modelMapper.map(ingredientEntity, IngredientDTO.class);
+    public IngredientDTO newIngredient(@Valid IngredientDTO ingredientDto) {
+        Ingredient ingredient = modelMapper.map(ingredientDto, Ingredient.class);
+        if(ingredientDto.getId() == null){
+            ingredient = ingredientRepo.save(ingredient);
+        }
+        return modelMapper.map(ingredient, IngredientDTO.class);
     }
 
     @Transactional
     public IngredientDTO getIngredient(Long id) {
         IngredientDTO ingredientDto = null;
-
-        try{
-            Ingredient ingredientEntity = ingredientRepo.getReferenceById(id);
-            ingredientEntity.getName();
-            ingredientDto = modelMapper.map(ingredientEntity, IngredientDTO.class);
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException("Ingredient with id " + id + " not found");
-        } catch (Exception e){
-            throw new RuntimeException();
+        Ingredient ingredient = ingredientRepo.findById(id).orElse(null);
+        if(ingredient != null){
+            ingredientDto = modelMapper.map(ingredient, IngredientDTO.class);
         }
-
+        
         return ingredientDto;
+    }
+
+    public IngredientDTO updateIngredient(IngredientDTO ingredientDto) {
+        Ingredient ingredient = ingredientRepo.findById(ingredientDto.getId()).orElseThrow(() -> new RuntimeException("Ingredient not found"));
+        ingredient.setName(ingredientDto.getName());
+        ingredient.setFromMonth(ingredientDto.getFromMonth());
+        ingredient.setToMonth(ingredientDto.getToMonth());
+        ingredient.setType(ingredientDto.getType());
+        ingredient =  ingredientRepo.save(ingredient);
+        return modelMapper.map(ingredient, IngredientDTO.class);
     }
 
     @Transactional
     public List<IngredientDTO> getAll() {
-        List<Ingredient> listIngredientEntity = ingredientRepo.findAll();
-        List<IngredientDTO> listIngredientDto = listIngredientEntity.stream().map(ingredient -> modelMapper.map(ingredient, IngredientDTO.class)).collect(Collectors.toList());
-        return listIngredientDto ;
+        List<Ingredient> listIngredient = ingredientRepo.findAll();
+
+        return listIngredient.stream().map(ingredient -> modelMapper.map(ingredient, IngredientDTO.class)).collect(Collectors.toList());
     }
 
     @Transactional

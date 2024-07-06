@@ -1,4 +1,4 @@
-package jeroana.comoencasa.model;
+/*package jeroana.comoencasa.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,4 +33,4 @@ public class UserRecipe {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
-}
+}*/

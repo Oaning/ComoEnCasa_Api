@@ -8,7 +8,9 @@ import jeroana.comoencasa.dto.RecipeDTO;
 
 @Service
 public interface RecipeService {
-    public RecipeDTO saveRecipe(@Valid RecipeDTO recipe);
+    public RecipeDTO newRecipe(@Valid RecipeDTO recipe);
+
+    public RecipeDTO updateRecipe(@Valid RecipeDTO recipe);
 
     public RecipeDTO getRecipe(Long id);
 

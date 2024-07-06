@@ -40,5 +40,5 @@ public class User {
     private String name;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserRecipe> recipesList = new ArrayList<UserRecipe>();
+    private List<Recipe> recipesList = new ArrayList<Recipe>();
 }

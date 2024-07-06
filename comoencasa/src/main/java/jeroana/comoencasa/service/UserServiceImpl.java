@@ -1,12 +1,10 @@
 package jeroana.comoencasa.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,8 +12,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jeroana.comoencasa.dto.RecipeDTO;
 import jeroana.comoencasa.dto.UserDTO;
+import jeroana.comoencasa.model.Recipe;
 import jeroana.comoencasa.model.User;
-import jeroana.comoencasa.repository.RecipeRepository;
 import jeroana.comoencasa.repository.UserRepository;
 
 @Service
@@ -24,86 +22,70 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepo;
-    
-    @Autowired
-    private RecipeRepository recipeRepo;
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Transactional
-    public UserDTO saveUser(UserDTO user) {
-        User userEntity = modelMapper.map(user, User.class);
-
-        if(user.getId() == null && userRepo.findByEmail(user.getEmail()) == null){
-            List<Long> ids = new ArrayList<Long>();
-            if(!user.getRecipesList().isEmpty()){
-                for(RecipeDTO recipes: user.getRecipesList()){
-                    ids.add(recipes.getId());
-                }
-                //userEntity.setRecipesList(recipeRepo.findByRecipes(ids));
-            }
+    public UserDTO login(String email, String password){
+        User user = userRepo.findByEmail(email);
+        if(user != null && user.getPassword().equals(password)){
+            return modelMapper.map(user, UserDTO.class);
         }
-        else{
-            userEntity = userRepo.getReferenceById(user.getId());
-            userEntity = modelMapper.map(user, User.class);
-        }
-
-        userEntity = userRepo.save(userEntity);
-        return modelMapper.map(userEntity, UserDTO.class);
+        throw new EntityNotFoundException("Invalid user or password");
     }
 
     @Transactional
-    public UserDTO login(String email, String password){
-        UserDTO userDto = null;
-
-        try{
-            User userEntity = userRepo.findByEmail(email);
-            if(userEntity != null && userEntity.getPassword().equals(password)){
-                userDto = modelMapper.map(userEntity, UserDTO.class);
-            }
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException("User with email " + email + " not found");
-        } catch (Exception e){
-            throw new RuntimeException();
+    public UserDTO newUser(UserDTO userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        if(userDto.getId() == null){
+            user = userRepo.save(user);
         }
 
-        return userDto;
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Transactional
+    public UserDTO updateUser(UserDTO userDto) {
+        User user = userRepo.findById(userDto.getId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        user.setName(userDto.getName());
+        user = userRepo.save(user);
+
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Transactional
     public UserDTO getUser(Long id) {
-        UserDTO userDto = null;
-
-        try{
-            User userEntity = userRepo.getReferenceById(id);
-            userEntity.getEmail();
-            userDto = modelMapper.map(userEntity, UserDTO.class);
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException("User with id " + id + " not found");
-        } catch (Exception e){
-            throw new RuntimeException();
-        }
-
-        return userDto;
+        User user = userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Transactional
     public List<UserDTO> getAll() {
         List<User> listUserEntity = userRepo.findAll();
-        List<UserDTO> listUserDto = listUserEntity.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
-        return listUserDto ;
+        return listUserEntity.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
     }
 
     @Transactional
     public void deleteUser(Long id) {
-        try{
-            userRepo.deleteById(id);
-        } catch (EmptyResultDataAccessException e){
-            throw new RuntimeException("User with id " + id + " not found");
-        } catch (Exception e){
-            throw new RuntimeException();
-        }
+        userRepo.deleteById(id);
     }
 
+    @Transactional
+    public void addRecipeToUser(Long id, RecipeDTO recipeDto){
+        User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
+        user.getRecipesList().add(recipe);
+        userRepo.save(user);
+    }
+
+    @Transactional
+    public void removeRecipeFromUser(Long id, RecipeDTO recipeDto){
+        User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
+        user.getRecipesList().remove(recipe);
+        userRepo.save(user);
+    }
 }

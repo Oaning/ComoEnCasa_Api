@@ -44,7 +44,7 @@ public class RecipeController {
 
     @PostMapping("/new")
     public RecipeDTO newRecipe(@RequestBody RecipeDTO recipe){
-        return recipeService.saveRecipe(recipe);
+        return recipeService.newRecipe(recipe);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -54,6 +54,6 @@ public class RecipeController {
 
     @PutMapping("/update")
     public RecipeDTO updateRecipe(@RequestBody RecipeDTO recipe){
-        return recipeService.saveRecipe(recipe);
+        return recipeService.updateRecipe(recipe);
     }
 }

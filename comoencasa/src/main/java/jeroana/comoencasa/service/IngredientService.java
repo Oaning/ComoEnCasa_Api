@@ -8,11 +8,13 @@ import jeroana.comoencasa.dto.IngredientDTO;
 
 @Service
 public interface IngredientService {
-    public IngredientDTO saveIngredient(@Valid IngredientDTO ingredient);
+    public IngredientDTO newIngredient(@Valid IngredientDTO ingredient);
 
     public IngredientDTO getIngredient(Long id);
 
     public List<IngredientDTO> getAll();
 
     public void deleteIngredient(Long id);
+
+    public IngredientDTO updateIngredient(@Valid IngredientDTO ingredient);
 }

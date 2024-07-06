@@ -8,11 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import jeroana.comoencasa.model.Ingredient;
+import jeroana.comoencasa.model.RecipeIngredient;
 
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
     Ingredient findByName (String name);
 
-    @Query("Select i from Ingredient i where i.id in :ids")
-    List<Ingredient> findByIngredients(@Param("ids") List<Long> ids);
+    @Query("SELECT ri FROM RecipeIngredient ri  where ri.ingredient in (SELECT i from Ingredient i WHERE i.id IN (:ids))")
+    List<RecipeIngredient> findByIngredients(@Param("ids") List<Long> ids);
 }

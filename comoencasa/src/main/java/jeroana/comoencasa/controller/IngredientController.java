@@ -33,7 +33,7 @@ public class IngredientController {
 
     @PostMapping("/new")
     public IngredientDTO newIngredient(@RequestBody IngredientDTO ingredient){
-        return ingredientService.saveIngredient(ingredient);
+        return ingredientService.newIngredient(ingredient);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -43,6 +43,6 @@ public class IngredientController {
 
     @PutMapping("/update")
     public IngredientDTO updateIngredient(@RequestBody IngredientDTO ingredient){
-        return ingredientService.saveIngredient(ingredient);
+        return ingredientService.updateIngredient(ingredient);
     }
 }

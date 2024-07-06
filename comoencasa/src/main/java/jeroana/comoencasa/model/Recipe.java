@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -35,9 +37,13 @@ public class Recipe {
     @Column(length = 500, nullable = true)
     private String photo;
 
-    @Column(length = 500, nullable = true)
+    @Column(length = 5000, nullable = true)
     private String description;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeIngredient> ingredientsList = new ArrayList<RecipeIngredient>();
+    private List<RecipeIngredient> recipeIngredientList = new ArrayList<RecipeIngredient>();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

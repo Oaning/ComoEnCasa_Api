@@ -39,7 +39,7 @@ public class UserController {
 
     @PostMapping("/new")
     public UserDTO newUser(@RequestBody UserDTO user){
-        return userService.saveUser(user);
+        return userService.newUser(user);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -49,6 +49,6 @@ public class UserController {
 
     @PutMapping("/update")
     public UserDTO updateUser(@RequestBody UserDTO user){
-        return userService.saveUser(user);
+        return userService.updateUser(user);
     }
 }

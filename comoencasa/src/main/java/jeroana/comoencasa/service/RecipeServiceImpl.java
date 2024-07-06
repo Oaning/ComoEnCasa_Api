@@ -11,13 +11,15 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jeroana.comoencasa.dto.IngredientDTO;
 import jeroana.comoencasa.dto.RecipeDTO;
+import jeroana.comoencasa.dto.RecipeIngredientDTO;
+import jeroana.comoencasa.model.Ingredient;
 import jeroana.comoencasa.model.Recipe;
+import jeroana.comoencasa.model.RecipeIngredient;
 import jeroana.comoencasa.repository.IngredientRepository;
+import jeroana.comoencasa.repository.RecipeIngredientRepository;
 import jeroana.comoencasa.repository.RecipeRepository;
 
 @Service
@@ -30,43 +32,73 @@ public class RecipeServiceImpl implements RecipeService{
     private IngredientRepository ingredientRepo;
 
     @Autowired
+    private RecipeIngredientRepository recipeIngredientRepo;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Transactional
-    public RecipeDTO saveRecipe(@Valid RecipeDTO recipe) {
-        Recipe recipeEntity = modelMapper.map(recipe, Recipe.class);
+    public RecipeDTO newRecipe(@Valid RecipeDTO recipeDto) {
+        Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
+        if(recipeDto.getId() == null){
+            recipe = recipeRepo.save(recipe);
 
-        if(recipe.getId() == null){
-            List<Long> ids = new ArrayList<Long>();
-            for(IngredientDTO ingredients: recipe.getIngredientsList()){
-                ids.add(ingredients.getId());
+            List<RecipeIngredientDTO> ingredientsList = recipeDto.getIngredientsList();
+            for(RecipeIngredientDTO riDto : ingredientsList){
+                /*Ingredient ingredient = ingredientRepo.findById(riDto.getIngredient_id()).orElseThrow(() -> new RuntimeException("Ingredient not found"));
+    
+                RecipeIngredient recipeIngredient = new RecipeIngredient();
+                recipeIngredient.setRecipe(recipe);
+                recipeIngredient.setIngredient(ingredient);
+                recipeIngredient.setQuantity(riDto.getQuantity());
+                recipeIngredientRepo.save(recipeIngredient);
+*/
+                addIngredientToRecipe(recipe.getId(), riDto);
             }
-            //recipeEntity.setIngredientsList(ingredientRepo.findByIngredients(ids));
-        }
-        else {
-            recipeEntity = recipeRepo.getReferenceById(recipe.getId());
-            recipeEntity = modelMapper.map(recipe, Recipe.class);
         }
 
-        recipeEntity = recipeRepo.save(recipeEntity);
-        return modelMapper.map(recipeEntity, RecipeDTO.class);
+        return modelMapper.map(recipe, RecipeDTO.class);
+    }
+    
+    @Transactional
+    private void addIngredientToRecipe(Long id, RecipeIngredientDTO recipeIngredientDto) {
+        Recipe recipe = recipeRepo.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found"));
+        Ingredient ingredient = ingredientRepo.findById(recipeIngredientDto.getIngredient_id()).orElseThrow(() -> new RuntimeException("Ingredient not found"));
+        RecipeIngredient recipeIngredient = new RecipeIngredient();
+        recipeIngredient.setRecipe(recipe);
+        recipeIngredient.setIngredient(ingredient);
+        recipeIngredient.setQuantity(recipeIngredientDto.getQuantity());
+
+        recipeIngredientRepo.save(recipeIngredient);
     }
 
     @Transactional
     public RecipeDTO getRecipe(Long id) {
         RecipeDTO recipeDto = null;
-
-        try{
-            Recipe recipeEntity = recipeRepo.getReferenceById(id);
-            recipeEntity.getName();
-            recipeDto = modelMapper.map(recipeEntity, RecipeDTO.class);
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException("Recipe with id " + id + " not found");
-        } catch (Exception e){
-            throw new RuntimeException();
+        Recipe recipe = recipeRepo.findById(id).orElse(null);
+        if(recipe != null){
+            recipeDto = modelMapper.map(recipe, RecipeDTO.class);
         }
 
         return recipeDto;
+    }
+    
+    @Transactional
+    public RecipeDTO updateRecipe(RecipeDTO recipeDto){
+        Recipe recipe = recipeRepo.findById(recipeDto.getId()).orElseThrow(() -> new RuntimeException("Recipe not found"));
+        recipe.setName(recipeDto.getName());
+        recipe.setDescription(recipeDto.getDescription());
+        recipe.setPhoto(recipeDto.getPhoto());
+
+        List<RecipeIngredient> recipeList =new ArrayList<>();
+        for(RecipeIngredientDTO ri : recipeDto.getIngredientsList()){
+            RecipeIngredient recipeIngredient = modelMapper.map(ri, RecipeIngredient.class);
+            recipeList.add(recipeIngredient);
+        }
+        recipe.setRecipeIngredientList(recipeList);
+        recipe = recipeRepo.save(recipe);
+        
+        return modelMapper.map(recipe, RecipeDTO.class);
     }
 
     @Transactional
@@ -105,4 +137,5 @@ public class RecipeServiceImpl implements RecipeService{
             throw new RuntimeException();
         }
     }
+
 }

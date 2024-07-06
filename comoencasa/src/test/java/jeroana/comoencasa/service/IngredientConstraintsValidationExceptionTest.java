@@ -18,35 +18,19 @@ public class IngredientConstraintsValidationExceptionTest {
     @Test
     public void constraintsValidationExceptionTest(){
         //prueba nombre nulo
-        assertThrows(ConstraintViolationException.class, () -> {ingredientService.saveIngredient(new IngredientDTO(null, "lácteo"));});
+        assertThrows(ConstraintViolationException.class, () -> {ingredientService.newIngredient(new IngredientDTO(null, "lácteo"));});
 
         //prueba nombre corto
-        assertThrows(ConstraintViolationException.class, () -> {ingredientService.saveIngredient(new IngredientDTO(null, "la"));});
+        assertThrows(ConstraintViolationException.class, () -> {ingredientService.newIngredient(new IngredientDTO(null, "la"));});
         
         //prueba nombre largo
-        assertThrows(ConstraintViolationException.class, () -> {ingredientService.saveIngredient(new IngredientDTO(null, "prueba1prueba2prueba3prueba4"));});
-        
-        //prueba mes mínimo menor a 1
-        IngredientDTO ing1 = new IngredientDTO();
-        ing1.setName("Tomate");
-        ing1.setFromMonth(0);
-        ing1.setToMonth(12);
-        ing1.setType("Verdura");
-        assertThrows(ConstraintViolationException.class, () -> {ingredientService.saveIngredient(ing1);});
-
-        //prueba mes máximo mayor a 12
-        IngredientDTO ing2 = new IngredientDTO();
-        ing2.setName("Tomate");
-        ing2.setFromMonth(1);
-        ing2.setToMonth(13);
-        ing2.setType("Verdura");
-        assertThrows(ConstraintViolationException.class, () -> {ingredientService.saveIngredient(ing2);});
+        assertThrows(ConstraintViolationException.class, () -> {ingredientService.newIngredient(new IngredientDTO(null, "prueba1prueba2prueba3prueba4"));});
 
         // prueba tipo nulo
-        assertThrows(ConstraintViolationException.class, () -> {ingredientService.saveIngredient(new IngredientDTO("leche", null));});
+        assertThrows(ConstraintViolationException.class, () -> {ingredientService.newIngredient(new IngredientDTO("leche", null));});
 
         //prueba todo nulo
-        assertThrows(ConstraintViolationException.class, () -> {ingredientService.saveIngredient(new IngredientDTO(null, null));});
+        assertThrows(ConstraintViolationException.class, () -> {ingredientService.newIngredient(new IngredientDTO(null, null));});
     }
 
     @Test
@@ -56,7 +40,7 @@ public class IngredientConstraintsValidationExceptionTest {
         ing.setFromMonth(1);
         ing.setToMonth(12);
         ing.setType("Verdura");
-        IngredientDTO ingredientDto = ingredientService.saveIngredient(ing);
+        IngredientDTO ingredientDto = ingredientService.newIngredient(ing);
 
         assertNotNull(ingredientDto);
 

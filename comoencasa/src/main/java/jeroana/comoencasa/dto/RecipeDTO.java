@@ -29,7 +29,9 @@ public class RecipeDTO {
 
     private String photo;
 
+    private String description;
+
     @Size(min = 1)
     @NotNull
-    private List<IngredientDTO> ingredientsList = new ArrayList<IngredientDTO>();
+    private List<RecipeIngredientDTO> ingredientsList = new ArrayList<RecipeIngredientDTO>();
 }
