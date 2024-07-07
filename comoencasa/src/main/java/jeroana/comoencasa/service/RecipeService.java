@@ -5,20 +5,21 @@ import org.springframework.stereotype.Service;
 
 import jakarta.validation.Valid;
 import jeroana.comoencasa.dto.RecipeDTO;
+import jeroana.comoencasa.dto.RecipeResponseDTO;
 
 @Service
 public interface RecipeService {
-    public RecipeDTO newRecipe(@Valid RecipeDTO recipe);
+    public RecipeResponseDTO newRecipe(@Valid RecipeDTO recipe);
 
-    public RecipeDTO updateRecipe(@Valid RecipeDTO recipe);
+    public RecipeResponseDTO updateRecipe(@Valid RecipeDTO recipe);
 
-    public RecipeDTO getRecipe(Long id);
+    public RecipeResponseDTO getRecipe(Long id);
 
-    public List<RecipeDTO> getAll();
+    public List<RecipeResponseDTO> getAll();
 
-    public List<RecipeDTO> getRecipesByIngredients(List<String> ingredients);
+    public List<RecipeResponseDTO> getRecipesByIngredients(List<String> ingredients);
 
-    public RecipeDTO getRandomRecipe();
+    public RecipeResponseDTO getRandomRecipe();
     
     public void deleteRecipe(Long id);
 }

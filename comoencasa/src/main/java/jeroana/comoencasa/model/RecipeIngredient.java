@@ -35,6 +35,6 @@ public class RecipeIngredient {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 50, nullable = false)
     private String quantity;
 }

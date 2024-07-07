@@ -28,7 +28,8 @@ public class IngredientServiceImpl implements IngredientService{
     @Transactional
     public IngredientDTO newIngredient(@Valid IngredientDTO ingredientDto) {
         Ingredient ingredient = modelMapper.map(ingredientDto, Ingredient.class);
-        if(ingredientDto.getId() == null){
+        Ingredient ingredientExists = ingredientRepo.findByName(ingredientDto.getName());
+        if(ingredientDto.getId() == null && ingredientExists == null){
             ingredient = ingredientRepo.save(ingredient);
         }
         return modelMapper.map(ingredient, IngredientDTO.class);

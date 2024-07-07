@@ -3,7 +3,6 @@ package jeroana.comoencasa.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,7 +39,7 @@ public class Recipe {
     @Column(length = 5000, nullable = true)
     private String description;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recipe")
     private List<RecipeIngredient> recipeIngredientList = new ArrayList<RecipeIngredient>();
 
     @ManyToOne

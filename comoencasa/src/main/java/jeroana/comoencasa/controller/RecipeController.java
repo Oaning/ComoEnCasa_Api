@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jeroana.comoencasa.dto.RecipeDTO;
+import jeroana.comoencasa.dto.RecipeResponseDTO;
 import jeroana.comoencasa.service.RecipeService;
 
 @RestController
@@ -23,27 +24,27 @@ public class RecipeController {
     RecipeService recipeService;
 
     @GetMapping("/{id}")
-    public RecipeDTO getRecipe(@PathVariable("id") Long id){
+    public RecipeResponseDTO getRecipe(@PathVariable("id") Long id){
         return recipeService.getRecipe(id);
     }
 
     @GetMapping("/all")
-    public List<RecipeDTO> getAll(){
+    public List<RecipeResponseDTO> getAll(){
         return recipeService.getAll();
     }
 
     @GetMapping("/ingredients")
-    public List<RecipeDTO> getRecipesByIngredients(@RequestParam("ingredients") List<String> ingredients){
+    public List<RecipeResponseDTO> getRecipesByIngredients(@RequestParam("ingredients") List<String> ingredients){
         return recipeService.getRecipesByIngredients(ingredients);
     }
 
     @GetMapping("/random")
-    public RecipeDTO getRandomRecipe(){
+    public RecipeResponseDTO getRandomRecipe(){
         return recipeService.getRandomRecipe();
     }
 
     @PostMapping("/new")
-    public RecipeDTO newRecipe(@RequestBody RecipeDTO recipe){
+    public RecipeResponseDTO newRecipe(@RequestBody RecipeDTO recipe){
         return recipeService.newRecipe(recipe);
     }
 
@@ -53,7 +54,7 @@ public class RecipeController {
     }
 
     @PutMapping("/update")
-    public RecipeDTO updateRecipe(@RequestBody RecipeDTO recipe){
+    public RecipeResponseDTO updateRecipe(@RequestBody RecipeDTO recipe){
         return recipeService.updateRecipe(recipe);
     }
 }

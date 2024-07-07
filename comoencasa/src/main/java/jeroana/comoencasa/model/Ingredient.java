@@ -1,15 +1,10 @@
 package jeroana.comoencasa.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -41,9 +36,6 @@ public class Ingredient {
 
     @Column(length = 25, nullable = false)
     private String type;
-    
-    //@OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<RecipeIngredient> recipeIngredientList = new ArrayList<RecipeIngredient>();
 
     public Ingredient(String name, String type) {
         this.name = name;
