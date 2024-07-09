@@ -12,8 +12,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jeroana.comoencasa.dto.RecipeDTO;
 import jeroana.comoencasa.dto.UserDTO;
+import jeroana.comoencasa.dto.UserRecipeDTO;
 import jeroana.comoencasa.model.Recipe;
 import jeroana.comoencasa.model.User;
+import jeroana.comoencasa.repository.RecipeRepository;
 import jeroana.comoencasa.repository.UserRepository;
 
 @Service
@@ -22,6 +24,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private RecipeRepository recipeRepo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -74,18 +79,28 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public void addRecipeToUser(Long id, RecipeDTO recipeDto){
-        User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
-        user.getRecipesList().add(recipe);
-        userRepo.save(user);
+    public void addRecipeToUser(UserRecipeDTO userRecipe){
+        Long userId = userRecipe.getUser_id();
+        Long recipeId = userRecipe.getRecipe_id();
+
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Recipe recipe = recipeRepo.findById(recipeId).orElse(null);
+        if(recipe != null){
+            user.getRecipesList().add(recipe);
+            userRepo.save(user);
+        }
     }
 
     @Transactional
-    public void removeRecipeFromUser(Long id, RecipeDTO recipeDto){
-        User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
-        user.getRecipesList().remove(recipe);
-        userRepo.save(user);
+    public void removeRecipeFromUser(UserRecipeDTO userRecipe){
+        Long userId = userRecipe.getUser_id();
+        Long recipeId = userRecipe.getRecipe_id();
+
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Recipe recipe = recipeRepo.findById(recipeId).orElse(null);
+        if(recipe != null){
+            user.getRecipesList().remove(recipe);
+            userRepo.save(user);
+        }
     }
 }

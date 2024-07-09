@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import jakarta.validation.Valid;
 import jeroana.comoencasa.dto.RecipeDTO;
 import jeroana.comoencasa.dto.UserDTO;
+import jeroana.comoencasa.dto.UserRecipeDTO;
 
 @Service
 public interface UserService {
@@ -21,7 +22,7 @@ public interface UserService {
 
     public void deleteUser(Long id);
 
-    public void addRecipeToUser(Long id, RecipeDTO recipeDto);
+    public void addRecipeToUser(UserRecipeDTO userRecipe);
 
-    public void removeRecipeFromUser(Long id, RecipeDTO recipeDto);
+    public void removeRecipeFromUser(UserRecipeDTO userRecipe);
 }

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jeroana.comoencasa.dto.LoginDTO;
+import jeroana.comoencasa.dto.RecipeDTO;
 import jeroana.comoencasa.dto.UserDTO;
+import jeroana.comoencasa.dto.UserRecipeDTO;
 import jeroana.comoencasa.service.UserService;
 
 @RestController
@@ -50,5 +52,15 @@ public class UserController {
     @PutMapping("/update")
     public UserDTO updateUser(@RequestBody UserDTO user){
         return userService.updateUser(user);
+    }
+
+    @PostMapping("/addUserRecipe")
+    public void addRecipeToUser(@RequestBody UserRecipeDTO userRecipe){
+        userService.addRecipeToUser(userRecipe);
+    }
+
+    @PostMapping("/deleteUserRecipe")
+    public void deleteRecipeFromUser(@RequestBody UserRecipeDTO userRecipe){
+        userService.removeRecipeFromUser(userRecipe);
     }
 }
