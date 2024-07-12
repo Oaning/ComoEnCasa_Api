@@ -17,7 +17,7 @@ import lombok.ToString;
 public class RecipeIngredientDTO {
 
     @NotBlank
-    private Long ingredient_id;
+    private String ingredient;
 
     @NotBlank
     private String quantity;

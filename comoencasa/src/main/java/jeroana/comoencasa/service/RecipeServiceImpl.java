@@ -57,13 +57,15 @@ public class RecipeServiceImpl implements RecipeService{
     @Transactional
     private void addIngredientToRecipe(Long id, RecipeIngredientDTO recipeIngredientDto) {
         Recipe recipe = recipeRepo.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found"));
-        Ingredient ingredient = ingredientRepo.findById(recipeIngredientDto.getIngredient_id()).orElseThrow(() -> new RuntimeException("Ingredient not found"));
-        RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.setRecipe(recipe);
-        recipeIngredient.setIngredient(ingredient);
-        recipeIngredient.setQuantity(recipeIngredientDto.getQuantity());
-
-        recipeIngredientRepo.save(recipeIngredient);
+        Ingredient ingredient = ingredientRepo.findByName(recipeIngredientDto.getIngredient());
+        if(ingredient != null){
+            RecipeIngredient recipeIngredient = new RecipeIngredient();
+            recipeIngredient.setRecipe(recipe);
+            recipeIngredient.setIngredient(ingredient);
+            recipeIngredient.setQuantity(recipeIngredientDto.getQuantity());
+    
+            recipeIngredientRepo.save(recipeIngredient);
+        }
     }
 
     @Transactional
@@ -98,14 +100,16 @@ public class RecipeServiceImpl implements RecipeService{
         List<RecipeIngredient> recipeList = new ArrayList<>();
         for(RecipeIngredientDTO ri : recipeDto.getIngredientsList()){
             RecipeIngredient recipeIngredient = new RecipeIngredient();
-            Ingredient ingredient = ingredientRepo.findById(ri.getIngredient_id()).orElse(null);
-            recipeIngredient.setIngredient(ingredient);
-            recipeIngredient.setRecipe(recipe);
-            recipeIngredient.setQuantity(ri.getQuantity());
-            
-            recipeIngredientRepo.save(recipeIngredient);
-            
-            recipeList.add(recipeIngredient);
+            Ingredient ingredient = ingredientRepo.findByName(ri.getIngredient());
+            if(ingredient != null){
+                recipeIngredient.setIngredient(ingredient);
+                recipeIngredient.setRecipe(recipe);
+                recipeIngredient.setQuantity(ri.getQuantity());
+                
+                recipeIngredientRepo.save(recipeIngredient);
+                
+                recipeList.add(recipeIngredient);
+            }
         }
         recipe.setRecipeIngredientList(recipeList);
         recipe = recipeRepo.save(recipe);
