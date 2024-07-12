@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jeroana.comoencasa.dto.LoginDTO;
-import jeroana.comoencasa.dto.RecipeDTO;
 import jeroana.comoencasa.dto.UserDTO;
 import jeroana.comoencasa.dto.UserRecipeDTO;
 import jeroana.comoencasa.service.UserService;

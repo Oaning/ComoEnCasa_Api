@@ -10,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jeroana.comoencasa.dto.RecipeDTO;
 import jeroana.comoencasa.dto.UserDTO;
 import jeroana.comoencasa.dto.UserRecipeDTO;
 import jeroana.comoencasa.model.Recipe;
