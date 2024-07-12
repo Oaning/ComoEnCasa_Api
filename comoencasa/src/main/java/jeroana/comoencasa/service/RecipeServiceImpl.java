@@ -75,6 +75,16 @@ public class RecipeServiceImpl implements RecipeService{
         }
         return recipeResponse;
     }
+
+    @Transactional
+    public RecipeResponseDTO getRecipeByName(String name) {
+        RecipeResponseDTO recipeResponse = null;
+        Recipe recipe = recipeRepo.findByName(name);
+        if(recipe != null){
+            recipeResponse = recipeToRecipeResponseDTO(recipe);
+        }
+        return recipeResponse;
+    }
     
     @Transactional
     public RecipeResponseDTO updateRecipe(RecipeDTO recipeDto){

@@ -28,6 +28,11 @@ public class RecipeController {
         return recipeService.getRecipe(id);
     }
 
+    @GetMapping("/{name}")
+    public RecipeResponseDTO getRecipeByName(@PathVariable("name") String recipeName){
+        return recipeService.getRecipeByName(recipeName);
+    }
+
     @GetMapping("/all")
     public List<RecipeResponseDTO> getAll(){
         return recipeService.getAll();
