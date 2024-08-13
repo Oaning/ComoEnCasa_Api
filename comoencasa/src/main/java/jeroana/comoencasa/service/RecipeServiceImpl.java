@@ -162,7 +162,7 @@ public class RecipeServiceImpl implements RecipeService{
         }
     }
 
-    private RecipeResponseDTO recipeToRecipeResponseDTO(Recipe recipe){
+    public static RecipeResponseDTO recipeToRecipeResponseDTO(Recipe recipe){
         RecipeResponseDTO recipeResponse = new RecipeResponseDTO();
         recipeResponse.setId(recipe.getId());
         recipeResponse.setName(recipe.getName());

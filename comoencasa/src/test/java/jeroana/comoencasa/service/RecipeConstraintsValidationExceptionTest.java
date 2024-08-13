@@ -41,7 +41,7 @@ public class RecipeConstraintsValidationExceptionTest {
 
         IngredientDTO pan = new IngredientDTO("Pan", "Grano");
         RecipeIngredientDTO ri = new RecipeIngredientDTO();
-        ri.setIngredient_id(pan.getId());
+        ri.setIngredient(pan.getName());
         ri.setQuantity("8 rebanadas");
         listaIngredientes.add(ri);
         
@@ -74,13 +74,13 @@ public class RecipeConstraintsValidationExceptionTest {
         recipeDto.setDescription("Infusionar la leche con canela, las pieles de naranja y de limón y el azúcar. Dejar enfriar y echar el pan. Poner a calentar una sartén con abundante aceite de oliva. En un bol batir los huevos, pasar el pan por ambas caras, y freír hasta que se dore al gusto por ambos lados.");
         List<RecipeIngredientDTO> ingredientDtoList = new ArrayList<>();
         RecipeIngredientDTO recipeIngredientDto = new RecipeIngredientDTO();
-        recipeIngredientDto.setIngredient_id(752L);
+        recipeIngredientDto.setIngredient("Huevos");
         recipeIngredientDto.setQuantity("2");
         ingredientDtoList.add(recipeIngredientDto);
-        recipeIngredientDto.setIngredient_id(753L);
+        recipeIngredientDto.setIngredient("Leche");
         recipeIngredientDto.setQuantity("1 litro");
         ingredientDtoList.add(recipeIngredientDto);
-        recipeIngredientDto.setIngredient_id(754L);
+        recipeIngredientDto.setIngredient("Pan");
         recipeIngredientDto.setQuantity("8 rebanadas");
         ingredientDtoList.add(recipeIngredientDto);
 

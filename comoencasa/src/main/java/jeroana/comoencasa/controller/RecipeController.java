@@ -28,7 +28,7 @@ public class RecipeController {
         return recipeService.getRecipe(id);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/get/{name}")
     public RecipeResponseDTO getRecipeByName(@PathVariable("name") String recipeName){
         return recipeService.getRecipeByName(recipeName);
     }

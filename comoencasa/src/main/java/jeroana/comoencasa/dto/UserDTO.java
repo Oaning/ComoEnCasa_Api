@@ -36,7 +36,7 @@ public class UserDTO {
     @Size(min = 3, max = 25)
     private String name;
 
-    private List<RecipeDTO> recipesList = new ArrayList<RecipeDTO>();
+    private List<RecipeResponseDTO> recipesList = new ArrayList<RecipeResponseDTO>();
 
     public UserDTO(String email, String password, String name) {
         this.email = email;

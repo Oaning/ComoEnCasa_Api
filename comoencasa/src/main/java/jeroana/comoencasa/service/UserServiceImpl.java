@@ -1,5 +1,6 @@
 package jeroana.comoencasa.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,9 +11,13 @@ import org.springframework.validation.annotation.Validated;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jeroana.comoencasa.dto.RecipeDTO;
+import jeroana.comoencasa.dto.RecipeResponseDTO;
 import jeroana.comoencasa.dto.UserDTO;
 import jeroana.comoencasa.dto.UserRecipeDTO;
+import jeroana.comoencasa.model.Ingredient;
 import jeroana.comoencasa.model.Recipe;
+import jeroana.comoencasa.model.RecipeIngredient;
 import jeroana.comoencasa.model.User;
 import jeroana.comoencasa.repository.RecipeRepository;
 import jeroana.comoencasa.repository.UserRepository;
@@ -63,13 +68,37 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public UserDTO getUser(Long id) {
         User user = userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return modelMapper.map(user, UserDTO.class);
+
+        UserDTO userDto = modelMapper.map(user, UserDTO.class);
+        List<Recipe> userRecipe = user.getRecipesList();
+        List<RecipeResponseDTO> recipeList = new ArrayList<>();
+        RecipeResponseDTO recipeDto;
+        for(Recipe recipe: userRecipe){
+            recipeDto = RecipeServiceImpl.recipeToRecipeResponseDTO(recipe);
+            recipeList.add(recipeDto);
+        }
+        userDto.setRecipesList(recipeList);
+        
+        return userDto;
     }
 
     @Transactional
     public List<UserDTO> getAll() {
         List<User> listUserEntity = userRepo.findAll();
-        return listUserEntity.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
+        List<UserDTO> listUserDto = new ArrayList<>();
+        for(User user: listUserEntity){
+            UserDTO userDto = modelMapper.map(user, UserDTO.class);
+            List<Recipe> userRecipe = user.getRecipesList();
+            List<RecipeResponseDTO> recipeList = new ArrayList<>();
+            RecipeResponseDTO recipeDto;
+            for(Recipe recipe: userRecipe){
+                recipeDto = RecipeServiceImpl.recipeToRecipeResponseDTO(recipe);
+                recipeList.add(recipeDto);
+            }
+            userDto.setRecipesList(recipeList);
+            listUserDto.add(userDto);
+        }
+        return listUserDto;
     }
 
     @Transactional
