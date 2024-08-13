@@ -2,7 +2,6 @@ package jeroana.comoencasa.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,10 @@ import org.springframework.validation.annotation.Validated;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jeroana.comoencasa.dto.RecipeDTO;
 import jeroana.comoencasa.dto.RecipeResponseDTO;
 import jeroana.comoencasa.dto.UserDTO;
 import jeroana.comoencasa.dto.UserRecipeDTO;
-import jeroana.comoencasa.model.Ingredient;
 import jeroana.comoencasa.model.Recipe;
-import jeroana.comoencasa.model.RecipeIngredient;
 import jeroana.comoencasa.model.User;
 import jeroana.comoencasa.repository.RecipeRepository;
 import jeroana.comoencasa.repository.UserRepository;
