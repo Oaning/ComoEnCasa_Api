@@ -39,11 +39,6 @@ public class RecipeRepositoryTest {
         Recipe tartaQueso = new Recipe();
         tartaQueso.setName("Tarta de queso");
 
-        //tartaQueso.getIngredientsList().add(quesoUntar);
-        //tartaQueso.getIngredientsList().add(huevo);
-        //tartaQueso.getIngredientsList().add(lecheCondensada);
-        //tartaQueso.getIngredientsList().add(nata);
-
         recipeRepository.save(tartaQueso);
 
         recipeRepository.flush();

@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public UserDTO newUser(UserDTO userDto) {
         User user = modelMapper.map(userDto, User.class);
-        if(userDto.getId() == null){
+        if(userDto.getId() == null || userDto.getId() == 0){
             user = userRepo.save(user);
         }
 

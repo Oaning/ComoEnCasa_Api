@@ -19,18 +19,18 @@ public class IngredientRepositoryTest {
 
     @Test
     public void get_ingredient_withValidParameters_shouldReturn200(){
-        Ingredient tomato = new Ingredient();
-        tomato.setName("Tomato");
-        tomato.setFromMonth(1);
-        tomato.setToMonth(12);
-        tomato.setType("Verdura");
-        ingredientRepository.save(tomato);
+        Ingredient tomate = new Ingredient();
+        tomate.setName("Tomate");
+        tomate.setFromMonth(1);
+        tomate.setToMonth(12);
+        tomate.setType("Verdura");
+        ingredientRepository.save(tomate);
 
         ingredientRepository.flush();
         
-        assertNotNull(tomato);
-        assertNotNull(tomato.getId());
-        assertEquals("Tomato", tomato.getName());
-        assertEquals(tomato.getId(), ingredientRepository.findByName("Tomato").getId());
+        assertNotNull(tomate);
+        assertNotNull(tomate.getId());
+        assertEquals("Tomate", tomate.getName());
+        assertEquals(tomate.getId(), ingredientRepository.findByName("Tomato").getId());
     }
 }

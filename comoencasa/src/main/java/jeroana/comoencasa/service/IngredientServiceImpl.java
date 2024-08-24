@@ -29,7 +29,7 @@ public class IngredientServiceImpl implements IngredientService{
     public IngredientDTO newIngredient(@Valid IngredientDTO ingredientDto) {
         Ingredient ingredient = modelMapper.map(ingredientDto, Ingredient.class);
         Ingredient ingredientExists = ingredientRepo.findByName(ingredientDto.getName());
-        if(ingredientDto.getId() == null && ingredientExists == null){
+        if((ingredientDto.getId() == null || ingredientDto.getId() == 0) && ingredientExists == null){
             ingredient = ingredientRepo.save(ingredient);
         }
         return modelMapper.map(ingredient, IngredientDTO.class);

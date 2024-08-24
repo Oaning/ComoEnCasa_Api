@@ -11,6 +11,8 @@ import jeroana.comoencasa.dto.RecipeResponseDTO;
 public interface RecipeService {
     public RecipeResponseDTO newRecipe(@Valid RecipeDTO recipe);
 
+    public void newAdminRecipe(@Valid RecipeDTO recipe);
+
     public RecipeResponseDTO updateRecipe(@Valid RecipeDTO recipe);
 
     public RecipeResponseDTO getRecipe(Long id);

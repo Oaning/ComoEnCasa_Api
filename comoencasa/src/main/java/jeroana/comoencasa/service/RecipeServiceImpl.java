@@ -42,7 +42,7 @@ public class RecipeServiceImpl implements RecipeService{
         RecipeResponseDTO recipeResponse = new RecipeResponseDTO();
         Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
         Recipe recipeExists = recipeRepo.findByName(recipeDto.getName());
-        if(recipeDto.getId() == null && recipeExists == null){
+        if((recipeDto.getId() == null || recipeDto.getId() == 0)&& recipeExists == null){
             recipe = recipeRepo.save(recipe);
             List<RecipeIngredientDTO> ingredientsList = recipeDto.getIngredientsList();
             for(RecipeIngredientDTO riDto : ingredientsList){
@@ -53,7 +53,7 @@ public class RecipeServiceImpl implements RecipeService{
 
         return recipeResponse;
     }
-    
+
     @Transactional
     private void addIngredientToRecipe(Long id, RecipeIngredientDTO recipeIngredientDto) {
         Recipe recipe = recipeRepo.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found"));
@@ -63,9 +63,15 @@ public class RecipeServiceImpl implements RecipeService{
             recipeIngredient.setRecipe(recipe);
             recipeIngredient.setIngredient(ingredient);
             recipeIngredient.setQuantity(recipeIngredientDto.getQuantity());
-    
+            
             recipeIngredientRepo.save(recipeIngredient);
         }
+    }
+    
+    @Transactional
+    public void newAdminRecipe(@Valid RecipeDTO recipeDto) {
+        Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
+        recipeRepo.save(recipe);
     }
 
     @Transactional

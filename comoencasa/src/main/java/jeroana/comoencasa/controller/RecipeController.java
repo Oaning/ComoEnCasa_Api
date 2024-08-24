@@ -53,6 +53,11 @@ public class RecipeController {
         return recipeService.newRecipe(recipe);
     }
 
+    @PostMapping("/newRecipe")
+    public void newAdminRecipe(@RequestBody RecipeDTO recipe){
+        recipeService.newAdminRecipe(recipe);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteRecipe(@PathVariable("id") Long id){
         recipeService.deleteRecipe(id);
