@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jakarta.validation.Valid;
+import jeroana.comoencasa.dto.UserAdminDTO;
 import jeroana.comoencasa.dto.UserDTO;
 import jeroana.comoencasa.dto.UserRecipeDTO;
 
@@ -17,7 +18,7 @@ public interface UserService {
 
     public UserDTO getUser(Long id);
 
-    public List<UserDTO> getAll();
+    public List<UserAdminDTO> getAll();
 
     public void deleteUser(Long id);
 

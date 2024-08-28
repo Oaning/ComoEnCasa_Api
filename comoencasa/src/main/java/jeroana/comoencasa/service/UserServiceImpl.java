@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jeroana.comoencasa.dto.RecipeResponseDTO;
+import jeroana.comoencasa.dto.UserAdminDTO;
 import jeroana.comoencasa.dto.UserDTO;
 import jeroana.comoencasa.dto.UserRecipeDTO;
 import jeroana.comoencasa.model.Recipe;
@@ -37,7 +38,9 @@ public class UserServiceImpl implements UserService{
         if(user != null && user.getPassword().equals(password)){
             return modelMapper.map(user, UserDTO.class);
         }
-        throw new EntityNotFoundException("Invalid user or password");
+        else{
+            return null;
+        }
     }
 
     @Transactional
@@ -79,19 +82,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public List<UserDTO> getAll() {
+    public List<UserAdminDTO> getAll() {
         List<User> listUserEntity = userRepo.findAll();
-        List<UserDTO> listUserDto = new ArrayList<>();
+        List<UserAdminDTO> listUserDto = new ArrayList<>();
         for(User user: listUserEntity){
-            UserDTO userDto = modelMapper.map(user, UserDTO.class);
-            List<Recipe> userRecipe = user.getRecipesList();
-            List<RecipeResponseDTO> recipeList = new ArrayList<>();
-            RecipeResponseDTO recipeDto;
-            for(Recipe recipe: userRecipe){
-                recipeDto = RecipeServiceImpl.recipeToRecipeResponseDTO(recipe);
-                recipeList.add(recipeDto);
-            }
-            userDto.setRecipesList(recipeList);
+            UserAdminDTO userDto = new UserAdminDTO(user.getId(), user.getEmail(), user.getPassword(), user.getName());
             listUserDto.add(userDto);
         }
         return listUserDto;
@@ -99,6 +94,11 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     public void deleteUser(Long id) {
+        User user = userRepo.findById(id).orElse(null);
+        if(user != null){
+            user.setRecipesList(null);
+            userRepo.save(user);
+        }
         userRepo.deleteById(id);
     }
 

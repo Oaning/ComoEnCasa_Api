@@ -38,6 +38,11 @@ public class RecipeController {
         return recipeService.getAll();
     }
 
+    @GetMapping("/allRecipes")
+    public List<RecipeDTO> getAllRecipes(){
+        return recipeService.getAllRecipes();
+    }
+
     @GetMapping("/ingredients")
     public List<RecipeResponseDTO> getRecipesByIngredients(@RequestParam("ingredients") List<String> ingredients){
         return recipeService.getRecipesByIngredients(ingredients);
@@ -64,7 +69,7 @@ public class RecipeController {
     }
 
     @PutMapping("/update")
-    public RecipeResponseDTO updateRecipe(@RequestBody RecipeDTO recipe){
-        return recipeService.updateRecipe(recipe);
+    public void updateRecipe(@RequestBody RecipeDTO recipe){
+        recipeService.updateRecipe(recipe);
     }
 }

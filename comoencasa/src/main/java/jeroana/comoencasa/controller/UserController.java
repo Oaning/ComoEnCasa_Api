@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jeroana.comoencasa.dto.LoginDTO;
+import jeroana.comoencasa.dto.UserAdminDTO;
 import jeroana.comoencasa.dto.UserDTO;
 import jeroana.comoencasa.dto.UserRecipeDTO;
 import jeroana.comoencasa.service.UserService;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<UserDTO> getAll(){
+    public List<UserAdminDTO> getAll(){
         return userService.getAll();
     }
 

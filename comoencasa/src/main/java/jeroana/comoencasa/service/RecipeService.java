@@ -13,13 +13,15 @@ public interface RecipeService {
 
     public void newAdminRecipe(@Valid RecipeDTO recipe);
 
-    public RecipeResponseDTO updateRecipe(@Valid RecipeDTO recipe);
+    public void updateRecipe(@Valid RecipeDTO recipe);
 
     public RecipeResponseDTO getRecipe(Long id);
 
     public RecipeResponseDTO getRecipeByName(String recipeName);
 
     public List<RecipeResponseDTO> getAll();
+
+    public List<RecipeDTO> getAllRecipes();
 
     public List<RecipeResponseDTO> getRecipesByIngredients(List<String> ingredients);
 

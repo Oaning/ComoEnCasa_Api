@@ -2,6 +2,7 @@ package jeroana.comoencasa.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import org.modelmapper.ModelMapper;
@@ -71,6 +72,22 @@ public class RecipeServiceImpl implements RecipeService{
     @Transactional
     public void newAdminRecipe(@Valid RecipeDTO recipeDto) {
         Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
+        recipe = recipeRepo.save(recipe);
+
+        List<RecipeIngredient> recipeList = new ArrayList<>();
+        for(RecipeIngredientDTO ri : recipeDto.getIngredientsList()){
+            Ingredient ingredient = ingredientRepo.findByName(ri.getIngredient());
+            RecipeIngredient recipeIngredient = new RecipeIngredient();
+            
+            recipeIngredient = new RecipeIngredient();
+            recipeIngredient.setIngredient(ingredient);
+            recipeIngredient.setRecipe(recipe);
+            recipeIngredient.setQuantity(ri.getQuantity());
+            recipeIngredientRepo.save(recipeIngredient);        
+            
+            recipeList.add(recipeIngredient);
+        }
+        recipe.setRecipeIngredientList(recipeList);
         recipeRepo.save(recipe);
     }
 
@@ -95,33 +112,31 @@ public class RecipeServiceImpl implements RecipeService{
     }
     
     @Transactional
-    public RecipeResponseDTO updateRecipe(RecipeDTO recipeDto){
-        RecipeResponseDTO recipeResponse = new RecipeResponseDTO();
-
+    public void updateRecipe(RecipeDTO recipeDto){
         Recipe recipe = recipeRepo.findById(recipeDto.getId()).orElseThrow(() -> new RuntimeException("Recipe not found"));
         recipe.setName(recipeDto.getName());
         recipe.setDescription(recipeDto.getDescription());
         recipe.setPhoto(recipeDto.getPhoto());
-
         List<RecipeIngredient> recipeList = new ArrayList<>();
         for(RecipeIngredientDTO ri : recipeDto.getIngredientsList()){
-            RecipeIngredient recipeIngredient = new RecipeIngredient();
             Ingredient ingredient = ingredientRepo.findByName(ri.getIngredient());
-            if(ingredient != null){
+            RecipeIngredient recipeIngredient = recipeIngredientRepo.findByRecipeIdAndIngredientId(recipe.getId(), ingredient.getId()).orElse(null);
+            if(Objects.nonNull(recipeIngredient)){
+                recipeIngredient.setQuantity(ri.getQuantity());
+                recipeIngredientRepo.save(recipeIngredient);
+            }
+            else{
+                recipeIngredient = new RecipeIngredient();
                 recipeIngredient.setIngredient(ingredient);
                 recipeIngredient.setRecipe(recipe);
                 recipeIngredient.setQuantity(ri.getQuantity());
-                
-                recipeIngredientRepo.save(recipeIngredient);
-                
-                recipeList.add(recipeIngredient);
+                recipeIngredientRepo.save(recipeIngredient);        
             }
+            recipeList.add(recipeIngredient);
         }
         recipe.setRecipeIngredientList(recipeList);
         recipe = recipeRepo.save(recipe);
         
-        recipeResponse = recipeToRecipeResponseDTO(recipe);
-        return recipeResponse;
     }
 
     @Transactional
@@ -134,6 +149,25 @@ public class RecipeServiceImpl implements RecipeService{
         }
 
         return recipeResponseList;
+    }
+
+    @Transactional
+    public List<RecipeDTO> getAllRecipes(){
+        List<Recipe> recipeList = recipeRepo.findAll();
+        List<RecipeDTO> recipeDTOs = new ArrayList<>();
+        for(Recipe recipe: recipeList){
+            RecipeDTO recipeDto = modelMapper.map(recipe, RecipeDTO.class);
+            List<RecipeIngredientDTO> ingredientsList = new ArrayList<>();
+            for(RecipeIngredient ri: recipe.getRecipeIngredientList()){
+                RecipeIngredientDTO riDto = new RecipeIngredientDTO();
+                riDto.setIngredient(ri.getIngredient().getName());
+                riDto.setQuantity(ri.getQuantity());
+                ingredientsList.add(riDto);
+            }
+            recipeDto.setIngredientsList(ingredientsList);
+            recipeDTOs.add(recipeDto);
+        }
+        return recipeDTOs;
     }
 
     @Transactional
@@ -160,6 +194,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Transactional
     public void deleteRecipe(Long id) {
         try{
+            recipeIngredientRepo.deleteByRecipeId(id);
             recipeRepo.deleteById(id);
         } catch (EmptyResultDataAccessException e){
             throw new RuntimeException("Recipe with id " + id + " not found");
