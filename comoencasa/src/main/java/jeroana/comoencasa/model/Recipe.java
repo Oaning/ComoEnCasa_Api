@@ -26,6 +26,7 @@ import lombok.ToString;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(length = 40, nullable = false)
